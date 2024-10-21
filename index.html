@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Your Ticket</title>
+    <style>
+        .hidden { display: none; }
+        .flashing-background {
+            animation: flashing 1s infinite;
+        }
+        @keyframes flashing {
+            0% { background-color: white; }
+            50% { background-color: yellow; }
+            100% { background-color: white; }
+        }
+    </style>
+</head>
+<body>
+    <div id="question-section">
+        <p>Did you submit your timesheet?</p>
+        <button onclick="handleResponse('yes')">Yes</button>
+        <button onclick="handleResponse('no')">No, I'll do it Friday</button>
+    </div>
+    <div id="reminder-section" class="hidden">
+        <p>Remember to submit your timesheet!</p>
+    </div>
+    <script>
+        function handleResponse(answer) {
+            if (answer === 'no') {
+                const now = new Date();
+                const day = now.getDay();
+                const isFriday = day === 5; // Friday
+                
+                if (isFriday) {
+                    document.getElementById('reminder-section').classList.remove('hidden');
+                    document.getElementById('reminder-section').classList.add('flashing-background');
+                } else {
+                    // Set timeout until Friday
+                    const msUntilFriday = (((5 - day + 7) % 7) * 24 * 60 * 60 * 1000) - (now.getHours() * 60 * 60 * 1000 + now.getMinutes() * 60 * 1000 + now.getSeconds() * 1000);
+                    setTimeout(() => {
+                        document.getElementById('reminder-section').classList.remove('hidden');
+                        document.getElementById('reminder-section').classList.add('flashing-background');
+                    }, msUntilFriday);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
